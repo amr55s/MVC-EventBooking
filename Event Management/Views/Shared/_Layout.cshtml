@@ -4,59 +4,67 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Event Management</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Event_Management.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    @RenderSection("Scripts", required: false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Event Management</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #27548A;">
+            <div class="container">
+                <a class="navbar-brand fw-bold" style="color:#DDA853;" asp-controller="Home" asp-action="Index">Event Management</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-gold fw-bold" asp-controller="Home" asp-action="Index">🏠 Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-gold fw-bold" asp-controller="Events" asp-action="Index">📅 All Events</a>
+                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Home" asp-action="Index">🏠 Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-gold fw-bold" asp-controller="Events" asp-action="Create">➕ Create Event</a>
-                        </li>
-                        <li class="nav-item ms-auto">
-                            <a class="btn btn-login" href="/Account/Login">Login</a>
+                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Events" asp-action="Index">📅 All Events</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-register" href="/Account/Register">Register</a>
+                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Events" asp-action="Create">➕ Create Event</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Services" asp-action="Index">🛎️ Services</a>
+                        </li>
+                    </ul>
 
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetInt32("UserId") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Profile">👤 Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">🚪 Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-    @RenderSection("Styles", required: false)
 
-    @if (Context.Session.GetInt32("UserId") != null)
-    {
-        <li class="nav-item">
-            <a class="nav-link text-warning" asp-controller="Account" asp-action="Logout">🚪 Logout</a>
-        </li>
-    }
+    <main role="main" class="container mt-4 pb-5">
+        @RenderBody()
+        @RenderSection("Styles", required: false)
+    </main>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <footer class="bg-light text-center py-3 border-top">
+        <span class="text-muted">© 2025 EventMaster. All rights reserved.</span>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

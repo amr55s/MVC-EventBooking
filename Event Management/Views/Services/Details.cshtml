@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Service Details";
+    var id = ViewBag.ServiceId ?? 0;
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="display-6" style="color:#27548A;">📋 Service Request</h2>
+        <p class="lead" style="color:#183B4E;">Fill out the form below to request this service. Our team will get back to you soon.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow" style="background-color:#F5EEDC;">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label" style="color:#183B4E;">Your Name</label>
+                        <input type="text" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="color:#183B4E;">Email Address</label>
+                        <input type="email" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="color:#183B4E;">Phone Number</label>
+                        <input type="text" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="color:#183B4E;">Event Description</label>
+                        <textarea class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-warning text-white">Submit Request</button>
+                        <a href="/Services" class="btn btn-secondary ms-2">Back to Services</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        h2.display-6 {
+            font-weight: bold;
+        }
+    </style>
+}

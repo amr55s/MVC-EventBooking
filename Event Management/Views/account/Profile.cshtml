@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "My Profile";
+    var name = Context.Session.GetString("UserName");
+    var id = Context.Session.GetInt32("UserId");
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow" style="background-color:#F5EEDC;">
+                <h3 class="mb-4 text-center" style="color:#27548A;">👤 My Profile</h3>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Name:</strong> @name</li>
+                    <li class="list-group-item"><strong>User ID:</strong> @id</li>
+                    <li class="list-group-item"><strong>Email:</strong> (add from DB if needed)</li>
+                </ul>
+
+                <div class="text-center mt-4">
+                    <a class="btn btn-danger" href="/Account/Logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -41,6 +41,14 @@ namespace Event_Management.Controllers
             return RedirectToAction("Login");
         }
 
+        public IActionResult Profile()
+        {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+                return RedirectToAction("Login");
+
+            return View();
+        }
+
 
 
         private readonly ApplicationDbContext _context;
