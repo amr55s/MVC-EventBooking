@@ -20,3 +20,24 @@ html {
 body {
   margin-bottom: 60px;
 }
+.text-gold {
+    color: #258cfb;
+}
+.card {
+    background-color: #F5EEDC;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+label {
+    color: #183B4E;
+}
+
+.btn-warning {
+    background-color: #DDA853;
+    border: none;
+}
+
+    .btn-warning:hover {
+        background-color: #c68d3f;
+    }

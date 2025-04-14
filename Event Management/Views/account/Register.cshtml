@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow">
+                <h3 class="mb-4 text-center" style="color:#27548A">📝 Register</h3>
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="FullName" class="form-control" required />
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Email</label>
+                        <input type="email" name="Email" class="form-control" required />
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Password</label>
+                        <input type="password" name="Password" class="form-control" required />
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>User Type</label>
+                        <select name="UserType" class="form-control" required>
+                            <option value="User">User</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100 mt-4 text-white">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            background-color: #F5EEDC;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        label {
+            color: #183B4E;
+        }
+
+        .btn-warning {
+            background-color: #DDA853;
+            border: none;
+        }
+
+            .btn-warning:hover {
+                background-color: #c68d3f;
+            }
+    </style>
+}

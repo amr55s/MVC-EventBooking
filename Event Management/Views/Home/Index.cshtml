@@ -1,8 +1,111 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to EventMaster";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4" style="color: #27548A;">🎊 EventMaster</h1>
+        <p class="lead" style="color: #183B4E;">Your partner in professional event planning and unforgettable moments.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <img src="/images/event-banner.jpg" class="img-fluid rounded shadow" alt="Event Image" />
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+            <div>
+                <h3 style="color: #183B4E;">About Us</h3>
+                <p>
+                    EventMaster is a leading event management company specializing in organizing weddings,
+                    conferences, concerts, and corporate events. With a dedicated team and creative vision,
+                    we ensure every detail of your event is perfect — from start to finish.
+                </p>
+                <p>
+                    Whether you're planning a private party or a large-scale gathering, we’re here to help you
+                    turn your ideas into a memorable reality.
+                </p>
+                <a class="btn" style="background-color: #DDA853; color: white;" asp-controller="Events" asp-action="Create">Book Your Event Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="mt-5">
+        <h3 class="text-center mb-4" style="color: #27548A;">🌟 What Our Clients Say</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card p-3 shadow-sm h-100">
+                    <p>“EventMaster turned my wedding day into a fairytale. Everything was perfect!”</p>
+                    <small class="text-muted">— Sarah A.</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 shadow-sm h-100">
+                    <p>“Highly professional team. Our company conference was a huge success!”</p>
+                    <small class="text-muted">— Ahmed R.</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 shadow-sm h-100">
+                    <p>“From planning to execution, they were amazing. I recommend them 100%.”</p>
+                    <small class="text-muted">— Nour M.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="mt-5 pt-4 border-top text-center" style="background-color: #F5EEDC; color: #183B4E;">
+        <p>&copy; 2025 EventMaster. All rights reserved.</p>
+        <p>Contact us at <a href="mailto:info@eventmaster.com">info@eventmaster.com</a></p>
+    </footer>
 </div>
+
+@section Styles {
+    <style>
+        body {
+            background-color: #F5EEDC;
+        }
+
+        .display-4 {
+            font-weight: bold;
+        }
+
+        img {
+            max-height: 350px;
+            object-fit: cover;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        .navbar {
+            background-color: #27548A;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+            .navbar .nav-link, .navbar-brand {
+                color: #DDA853 !important;
+                font-weight: bold;
+            }
+
+                .navbar .nav-link:hover {
+                    color: #fff !important;
+                    background-color: #DDA853;
+                    border-radius: 8px;
+                }
+
+            .navbar .btn-login, .navbar .btn-register {
+                background-color: #DDA853;
+                color: white;
+                margin-left: 10px;
+            }
+
+        .navbar-nav .nav-item a::before {
+            content: "✨ ";
+        }
+    </style>
+}

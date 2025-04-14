@@ -1,0 +1,38 @@
+﻿@model Event_Management.Models.Event
+
+@{
+    ViewData["Title"] = "Event Created";
+}
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="text-success">🎉 Event Created Successfully!</h2>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <img src="@Model.ImagePath" class="img-fluid rounded" alt="Event Image" />
+            </div>
+            <div class="col-md-8">
+                <h4 class="mb-3">@Model.EventName</h4>
+                <p><strong>Date:</strong> @Model.EventDate.ToShortDateString()</p>
+                <p><strong>Location:</strong> @Model.Location?.LocationName</p>
+                <p><strong>Organizer:</strong> @Model.Organizer?.FullName</p>
+                <a href="/Events" class="btn btn-primary mt-3">Back to Events List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            border-radius: 1rem;
+            border: 1px solid #e0e0e0;
+            background-color: #f9f9f9;
+        }
+        img {
+            max-height: 250px;
+            object-fit: cover;
+        }
+    </style>
+}
