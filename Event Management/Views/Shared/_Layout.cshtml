@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Event Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-    @RenderSection("Scripts", required: false)
+    @RenderSection("Styles", required: false)
+
 </head>
 <body>
     <header>
@@ -20,20 +21,46 @@
                         <li class="nav-item">
                             <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Home" asp-action="Index">🏠 Home</a>
                         </li>
+                        @if (Context.Session.GetString("UserType") == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Events" asp-action="Index">📅 All Events</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Events" asp-action="Create">➕ Create Event</a>
+                            </li>
+                        }
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Services" asp-action="Index">🛎️ Services</a>
+                            </li>
+                        
+                        @if (Context.Session.GetString("UserType") == "User")
+                        {
                         <li class="nav-item">
-                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Events" asp-action="Index">📅 All Events</a>
+                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Tickets" asp-action="Create">🎟️ Tickets</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Events" asp-action="Create">➕ Create Event</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Services" asp-action="Index">🛎️ Services</a>
-                        </li>
+                        }
+                        @if (Context.Session.GetString("UserType") == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Admin" asp-action="Dashboard">👑 Admin Panel</a>
+                            </li>
+                        }
+
                     </ul>
 
                     <ul class="navbar-nav">
                         @if (Context.Session.GetInt32("UserId") != null)
                         {
+                            var userType = Context.Session.GetString("UserType");
+
+                            if (userType == "User")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-warning" asp-controller="Tickets" asp-action="MyTickets">🎟️ My Tickets</a>
+                                </li>
+                            }
+
                             <li class="nav-item">
                                 <a class="nav-link text-warning" asp-controller="Account" asp-action="Profile">👤 Profile</a>
                             </li>
@@ -41,6 +68,7 @@
                                 <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">🚪 Logout</a>
                             </li>
                         }
+
                         else
                         {
                             <li class="nav-item">
@@ -58,7 +86,7 @@
 
     <main role="main" class="container mt-4 pb-5">
         @RenderBody()
-        @RenderSection("Styles", required: false)
+      
     </main>
 
     <footer class="bg-light text-center py-3 border-top">
@@ -66,5 +94,8 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @RenderSection("Scripts", required: false)
+
 </body>
 </html>

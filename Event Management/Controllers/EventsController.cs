@@ -13,6 +13,8 @@ namespace Event_Management.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+
+
         public EventsController(ApplicationDbContext context)
         {
             _context = context;
@@ -21,6 +23,10 @@ namespace Event_Management.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
+            if (HttpContext.Session.GetString("UserType") != "Admin")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
             var events = _context.Events
                 .Include(e => e.Location)
                 .Include(e => e.Organizer);
@@ -48,9 +54,11 @@ namespace Event_Management.Controllers
         public IActionResult Create()
         {
             // لو المستخدم مش مسجل دخول
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            var userType = HttpContext.Session.GetString("UserType");
+
+            if (userType != "Manager" && userType != "Admin") // يعني يا Manager يا Admin
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("AccessDenied", "Account");
             }
 
             ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationName");

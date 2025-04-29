@@ -1,0 +1,53 @@
+﻿@model List<Event_Management.Models.Ticket>
+
+@{
+    ViewData["Title"] = "My Tickets";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5" style="color:#27548A;">🎟️ My Tickets</h2>
+        <p class="lead" style="color:#183B4E;">Here are your booked events.</p>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info text-center">
+            You have not booked any tickets yet.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered shadow">
+            <thead class="table-light">
+                <tr>
+                    <th>Event Name</th>
+                    <th>Ticket Type</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Model)
+                {
+                    <tr>
+                        <td>@ticket.Event?.EventName</td>
+                        <td>@ticket.TicketType</td>
+                        <td>@ticket.Price.ToString("0.00") EGP</td>
+                        <td>
+                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@ticket.TicketId" onclick="return confirm('Are you sure you want to delete this ticket?');">🗑️ Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Styles {
+    <style>
+        h2.display-5 {
+            font-weight: 700;
+        }
+    </style>
+}
+

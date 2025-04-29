@@ -1,25 +1,38 @@
-﻿@{
+﻿@model Event_Management.Models.User
+
+@{
     ViewData["Title"] = "My Profile";
-    var name = Context.Session.GetString("UserName");
-    var id = Context.Session.GetInt32("UserId");
 }
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card p-4 shadow" style="background-color:#F5EEDC;">
-                <h3 class="mb-4 text-center" style="color:#27548A;">👤 My Profile</h3>
-
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>Name:</strong> @name</li>
-                    <li class="list-group-item"><strong>User ID:</strong> @id</li>
-                    <li class="list-group-item"><strong>Email:</strong> (add from DB if needed)</li>
-                </ul>
+                <div class="text-center mb-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="rounded-circle" width="100" height="100" alt="Profile Picture" />
+                    <h3 class="mt-3" style="color:#27548A;">👤 @Model.FullName</h3>
+                    <p class="text-muted">@Model.Email</p>
+                    <span class="badge bg-primary">@Model.UserType</span>
+                </div>
 
                 <div class="text-center mt-4">
-                    <a class="btn btn-danger" href="/Account/Logout">Logout</a>
+                    <a href="/Account/Logout" class="btn btn-danger w-100 mb-2">🚪 Logout</a>
+                    <a href="#" class="btn btn-secondary w-100">✏️ Edit Profile (Coming Soon)</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Styles {
+    <style>
+        img.rounded-circle {
+            border: 3px solid #DDA853;
+            padding: 5px;
+        }
+
+        .card-title {
+            font-weight: 700;
+        }
+    </style>
+}
