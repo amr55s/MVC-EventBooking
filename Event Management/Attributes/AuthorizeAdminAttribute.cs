@@ -9,18 +9,15 @@ namespace Event_Management.Attributes
         {
             var httpContext = context.HttpContext;
 
-            // أول حاجة: تأكد إن المستخدم مسجل دخول
             if (httpContext.Session.GetInt32("UserId") == null)
             {
                 context.Result = new RedirectToActionResult("Login", "Account", null);
                 return;
             }
 
-            // تاني حاجة: تأكد إنه Admin
-            var userType = httpContext.Session.GetString("UserType");
-            if (userType != "Admin")
+            if (httpContext.Session.GetString("UserType") != "Admin")
             {
-                context.Result = new RedirectToActionResult("Index", "Home", null);
+                context.Result = new RedirectToActionResult("AccessDenied", "Account", null);
                 return;
             }
 

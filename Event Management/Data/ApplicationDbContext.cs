@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Event_Management.Models;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Net.Sockets;
 
 namespace Event_Management.Data
 {
@@ -12,8 +9,6 @@ namespace Event_Management.Data
             : base(options)
         {
         }
-
-        public ApplicationDbContext() { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Event> Events { get; set; }
@@ -25,7 +20,20 @@ namespace Event_Management.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Booking relationships
+            // Event -> Location (many events per location)
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Location)
+                .WithMany(l => l.Events)
+                .HasForeignKey(e => e.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Event -> Organizer/User (many events per organizer)
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Organizer)
+                .WithMany(u => u.OrganizedEvents)
+                .HasForeignKey(e => e.OrganizerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.User)
                 .WithMany(u => u.Bookings)
@@ -38,7 +46,6 @@ namespace Event_Management.Data
                 .HasForeignKey(b => b.EventId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Ticket relationships
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.User)
                 .WithMany(u => u.Tickets)
@@ -50,6 +57,12 @@ namespace Event_Management.Data
                 .WithMany(e => e.Tickets)
                 .HasForeignKey(t => t.EventId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // SQLite has no native DECIMAL; store monetary values as REAL (numeric).
+            modelBuilder.Entity<Ticket>()
+                .Property(t => t.Price)
+                .HasColumnType("REAL")
+                .HasPrecision(18, 2);
         }
     }
 }

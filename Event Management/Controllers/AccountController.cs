@@ -24,33 +24,38 @@ namespace Event_Management.Controllers
 
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string? returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public IActionResult Login(string email, string password)
+        public IActionResult Login(string email, string password, string? returnUrl = null)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
             if (user == null)
             {
                 ViewBag.Error = "Invalid email or password.";
+                ViewData["ReturnUrl"] = returnUrl;
                 return View();
             }
 
-            // ✅ تسجيل بيانات المستخدم في السيشن
             HttpContext.Session.SetInt32("UserId", user.UserId);
-            HttpContext.Session.SetString("UserName", user.FullName);
-            HttpContext.Session.SetString("UserType", user.UserType ?? "User"); // نحفظ النوع لو موجود، ولو مش موجود نخليه "User" عادي
+            HttpContext.Session.SetString("UserName", user.FullName ?? string.Empty);
+            HttpContext.Session.SetString("UserType", user.UserType ?? "User");
 
-            // ✅ إعادة توجيه حسب نوع المستخدم
-            if (user.UserType == "Admin")
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
-                return RedirectToAction("Dashboard", "Admin"); // لو Admin يروح للوحة التحكم
+                return Redirect(returnUrl);
             }
 
-            return RedirectToAction("Index", "Home"); // لو User عادي يروح للصفحة الرئيسية
+            if (user.UserType == "Admin")
+            {
+                return RedirectToAction("Dashboard", "Admin");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult Logout()
         {

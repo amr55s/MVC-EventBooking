@@ -4,42 +4,25 @@
 
 @if (ViewBag.Error != null)
 {
-    <div class="alert alert-danger text-center">@ViewBag.Error</div>
+    <div class="alert alert-danger alert-glass text-center mb-4">@ViewBag.Error</div>
 }
 
-<div class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card p-4 shadow" style="background-color: #F5EEDC; border: 1px solid #ccc; border-radius: 10px;">
-                <h3 class="mb-4 text-center" style="color:#27548A;">🔐 Login</h3>
+<div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+        <div class="glass-card">
+            <h3 class="page-title text-center mb-4" style="font-size: 1.35rem;">Login</h3>
                 <form asp-controller="Account" asp-action="Login" method="post">
-                    <div class="form-group mb-3">
-                        <label style="color:#183B4E;">Email</label>
-                        <input type="email" name="email" class="form-control" required />
-                    </div>
-                    <div class="form-group mb-4">
-                        <label style="color:#183B4E;">Password</label>
-                        <input type="password" name="password" class="form-control" required />
-                    </div>
-                    <button type="submit" class="btn w-100 text-white" style="background-color: #DDA853;">Login</button>
-                </form>
-            </div>
+                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" required />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-accent w-100">Sign in</button>
+            </form>
         </div>
     </div>
 </div>
-
-@section Styles {
-    <style>
-        label {
-            font-weight: 500;
-        }
-
-        .card input {
-            border-radius: 5px;
-        }
-
-        button.btn:hover {
-            background-color: #c68d3f !important;
-        }
-    </style>
-}

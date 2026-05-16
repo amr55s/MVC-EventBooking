@@ -1,59 +1,41 @@
-﻿@model IEnumerable<Event_Management.Models.Event>
-
+@model IEnumerable<Event_Management.Models.Event>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Events";
 }
 
-<h1>Index</h1>
+<div class="page-header">
+    <h1 class="page-title">All Events</h1>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EventName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImagePath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Organizer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.LocationId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Organizer.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="page-actions">
+    <a asp-action="Create" class="btn btn-accent">Create New Event</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-glass mb-0">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.EventName)</th>
+                <th>@Html.DisplayNameFor(model => model.EventDate)</th>
+                <th>Location</th>
+                <th>Organizer</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.EventName)</td>
+                <td>@Html.DisplayFor(modelItem => item.EventDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Location.LocationId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Organizer.UserId)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EventId" class="link-action">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.EventId" class="link-action">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.EventId" class="link-action text-danger">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

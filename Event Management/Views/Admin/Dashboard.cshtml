@@ -1,40 +1,38 @@
-﻿@{
+@{
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-5">
-        <h2 class="display-5" style="color:#27548A; font-weight:600;">👑 Admin Dashboard</h2>
-        <p class="lead" style="color:#183B4E;">Welcome, Admin! Manage the entire event system from one place.</p>
-    </div>
+<div class="page-header">
+    <h1 class="page-title">Admin Dashboard</h1>
+    <p class="page-subtitle">Manage the entire event system from one place.</p>
+</div>
 
-    <div class="row text-center">
-        <div class="col-md-4 mb-4">
-            <div class="card p-4 shadow" style="background-color: #F5EEDC;">
-                <h5 class="card-title" style="color:#27548A;">📅 Total Events</h5>
-                <h2 class="card-text" style="color:#183B4E;">@ViewBag.EventCount</h2>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card p-4 shadow" style="background-color: #F5EEDC;">
-                <h5 class="card-title" style="color:#27548A;">👥 Registered Users</h5>
-                <h2 class="card-text" style="color:#183B4E;">@ViewBag.UserCount</h2>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card p-4 shadow" style="background-color: #F5EEDC;">
-                <h5 class="card-title" style="color:#27548A;">🎟️ Total Tickets</h5>
-                <h2 class="card-text" style="color:#183B4E;">@ViewBag.TicketCount</h2>
-            </div>
+<div class="row g-4 text-center mb-5">
+    <div class="col-md-4">
+        <div class="glass stat-card">
+            <h5 class="card-title">Total Events</h5>
+            <p class="stat-value">@ViewBag.EventCount</p>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="glass stat-card">
+            <h5 class="card-title">Registered Users</h5>
+            <p class="stat-value">@ViewBag.UserCount</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass stat-card">
+            <h5 class="card-title">Total Tickets</h5>
+            <p class="stat-value">@ViewBag.TicketCount</p>
+        </div>
+    </div>
+</div>
 
-    <div class="mt-5">
-        <h4 class="text-center" style="color:#27548A;">🆕 Latest Events</h4>
-        <table class="table table-bordered mt-3">
-            <thead class="table-light">
+<div class="glass-card mb-5">
+    <h4 class="text-center mb-4" style="font-size: 1.15rem;">Latest Events</h4>
+    <div class="table-responsive">
+        <table class="table table-glass mb-0">
+            <thead>
                 <tr>
                     <th>Event Name</th>
                     <th>Date</th>
@@ -53,89 +51,53 @@
             </tbody>
         </table>
     </div>
-
-
-    <div class="mt-5">
-        <h4 class="text-center" style="color:#27548A;">📊 System Overview</h4>
-        <canvas id="dashboardChart" height="100"></canvas>
-    </div>
-
-
-    <div class="mt-5">
-        <h4 class="text-center" style="color:#27548A;">🛠️ Quick Actions</h4>
-        <p class="text-center">Manage events, users, and tickets efficiently.</p>
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <a href="/Events/Index" class="btn btn-primary w-100">📅 View All Events</a>
-            </div>
-            <div class="col-md-4 mb-4">
-                <a href="/Users/Index" class="btn btn-success w-100">👥 View All Users</a>
-            </div>
-            <div class="col-md-4 mb-4">
-                <a href="/Tickets/Index" class="btn btn-danger w-100">🎟️ View All Tickets</a>
-            </div>
-    <div class="text-center mt-5">
-        <a href="/Events/Create" class="btn btn-warning text-white fw-bold me-2">➕ Create New Event</a>
-        <a href="/Services/Index" class="btn btn-secondary fw-bold">🛎️ Manage Services</a>
-    </div>
 </div>
 
-@section Styles {
-    <style>
-        .card-title {
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-
-        .card-text {
-            font-weight: 700;
-            font-size: 2rem;
-        }
-
-        h2.display-5 {
-            font-weight: 700;
-        }
-    </style>
-}
-
-
-
-<div class="mt-5">
-    <h4 class="text-center" style="color:#27548A;">📊 Events, Users, Tickets Overview</h4>
+<div class="chart-container mb-5">
+    <h4 class="text-center mb-4" style="font-size: 1.15rem;">System Overview</h4>
     <canvas id="dashboardChart" height="100"></canvas>
 </div>
 
-        @section Scripts {
-            <script>
-                const ctx = document.getElementById('dashboardChart').getContext('2d');
-                const dashboardChart = new Chart(ctx, {
-                    type: 'bar', // نوع الشارت (bar - ممكن تغيره line أو pie كمان)
-                    data: {
-                        labels: ['Events', 'Users', 'Tickets'],
-                        datasets: [{
-                            label: 'System Overview',
-                            data: [@ViewBag.EventCount, @ViewBag.UserCount, @ViewBag.TicketCount],
-                            backgroundColor: [
-                                '#DDA853', // Events - ذهبي
-                                '#27548A', // Users - أزرق غامق
-                                '#183B4E'  // Tickets - أزرق أغمق
-                            ],
-                            borderColor: [
-                                '#DDA853',
-                                '#27548A',
-                                '#183B4E'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            </script>
-        }
+<div class="text-center">
+    <h4 class="mb-3" style="font-size: 1.15rem;">Quick Actions</h4>
+    <div class="row g-3 justify-content-center mb-4">
+        <div class="col-md-4">
+            <a href="/Events/Index" class="btn btn-primary-glass w-100">View All Events</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Users/Index" class="btn btn-primary-glass w-100">View All Users</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Tickets/Index" class="btn btn-primary-glass w-100">View All Tickets</a>
+        </div>
+    </div>
+    <div class="gap-actions">
+        <a href="/Events/Create" class="btn btn-accent">Create New Event</a>
+        <a href="/Services/Index" class="btn btn-ghost">Manage Services</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const ctx = document.getElementById('dashboardChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Events', 'Users', 'Tickets'],
+                datasets: [{
+                    label: 'Count',
+                    data: [@ViewBag.EventCount, @ViewBag.UserCount, @ViewBag.TicketCount],
+                    backgroundColor: ['rgba(184, 149, 74, 0.7)', 'rgba(61, 90, 128, 0.7)', 'rgba(30, 45, 61, 0.5)'],
+                    borderColor: ['#b8954a', '#3d5a80', '#1e2d3d'],
+                    borderWidth: 1,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } }
+            }
+        });
+    </script>
+}

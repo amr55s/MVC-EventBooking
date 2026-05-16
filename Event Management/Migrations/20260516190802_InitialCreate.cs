@@ -17,8 +17,8 @@ namespace Event_Management.Migrations
                 {
                     LocationId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    LocationName = table.Column<string>(type: "TEXT", nullable: true),
-                    Address = table.Column<string>(type: "TEXT", nullable: true),
+                    LocationName = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    Address = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true),
                     Capacity = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -49,7 +49,7 @@ namespace Event_Management.Migrations
                 {
                     EventId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    EventName = table.Column<string>(type: "TEXT", nullable: true),
+                    EventName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     EventDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ImagePath = table.Column<string>(type: "TEXT", nullable: true),
                     LocationId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -63,13 +63,13 @@ namespace Event_Management.Migrations
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "LocationId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Events_Users_OrganizerId",
                         column: x => x.OrganizerId,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

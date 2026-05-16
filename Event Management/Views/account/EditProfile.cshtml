@@ -1,57 +1,40 @@
-﻿@model Event_Management.Models.User
-
+@model Event_Management.Models.User
 @{
     ViewData["Title"] = "Edit Profile";
 }
 
-
 @if (!ViewData.ModelState.IsValid)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-glass mb-4">
         @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
         {
-            <p>@error.ErrorMessage</p>
+            <p class="mb-0">@error.ErrorMessage</p>
         }
     </div>
 }
 
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card p-4 shadow" style="background-color:#F5EEDC;">
-                <h3 class="text-center mb-4" style="color:#27548A;">✏️ Edit Your Profile</h3>
-
-                <form asp-action="EditProfile" method="post">
-                    <div class="mb-3">
-                        <label class="form-label" style="color:#183B4E;">Full Name</label>
-                        <input asp-for="FullName" class="form-control" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" style="color:#183B4E;">Email Address</label>
-                        <input asp-for="Email" type="email" class="form-control" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" style="color:#183B4E;">Password</label>
-                        <input asp-for="Password" type="password" class="form-control" required />
-                    </div>
-
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-warning text-white w-100">💾 Save Changes</button>
-                        <a href="/Account/Profile" class="btn btn-secondary w-100 mt-2">🔙 Back to Profile</a>
-                    </div>
-                </form>
-            </div>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card">
+            <h3 class="page-title text-center mb-4" style="font-size: 1.35rem;">Edit Profile</h3>
+            <form asp-action="EditProfile" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input asp-for="FullName" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input asp-for="Email" type="email" class="form-control" required />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" required />
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-accent">Save Changes</button>
+                    <a href="/Account/Profile" class="btn btn-ghost">Back to Profile</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-@section Styles {
-    <style>
-        label {
-            font-weight: 500;
-        }
-    </style>
-}

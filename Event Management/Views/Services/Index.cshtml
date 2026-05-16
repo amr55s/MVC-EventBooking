@@ -1,76 +1,43 @@
-﻿@{
+@{
     ViewData["Title"] = "Our Services";
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-5">
-        <h2 class="display-5" style="color:#27548A; font-weight:600;">📌 Our Services</h2>
-        <p class="lead" style="color:#183B4E; max-width: 700px; margin:auto;">
-            At EventMaster, we provide tailored event management solutions to turn your vision into unforgettable reality.
-            From private celebrations to large-scale corporate events, we’ve got you covered.
-        </p>
+<div class="page-header">
+    <h1 class="page-title">Our Services</h1>
+    <p class="page-subtitle lead">
+        Tailored event management solutions to turn your vision into an unforgettable reality.
+    </p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="glass service-card">
+            <h5 class="card-title">Private Events</h5>
+            <p class="card-text">Weddings, birthdays, graduations and special moments — planned from A to Z.</p>
+        </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow" style="background-color: #F5EEDC;">
-                <div class="card-body">
-                    <h5 class="card-title" style="color:#27548A;">🎉 Private Events</h5>
-                    <p class="card-text">Weddings, birthdays, graduations and all special moments — perfectly planned from A to Z.</p>
-                </div>
-            </div>
+    <div class="col-md-4">
+        <div class="glass service-card">
+            <h5 class="card-title">Conferences & Business</h5>
+            <p class="card-text">Professional setup with audio/visuals, scheduling, and guest management.</p>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow" style="background-color: #F5EEDC;">
-                <div class="card-body">
-                    <h5 class="card-title" style="color:#27548A;">📊 Conferences & Business</h5>
-                    <p class="card-text">Professional event setup with audio/visuals, scheduling, guest management, and more.</p>
-                </div>
-            </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass service-card">
+            <h5 class="card-title">Public Shows & Festivals</h5>
+            <p class="card-text">Concerts, cultural shows, and entertainment for large audiences.</p>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow" style="background-color: #F5EEDC;">
-                <div class="card-body">
-                    <h5 class="card-title" style="color:#27548A;">🎭 Public Shows & Festivals</h5>
-                    <p class="card-text">Planning concerts, cultural shows, and entertainment events that engage large audiences.</p>
-                </div>
-            </div>
+    </div>
+    <div class="col-md-6">
+        <div class="glass service-card">
+            <h5 class="card-title">Venue & Equipment Rental</h5>
+            <p class="card-text">Top venues and professional lighting, sound systems, and more.</p>
         </div>
-
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow" style="background-color: #F5EEDC;">
-                <div class="card-body">
-                    <h5 class="card-title" style="color:#27548A;">🏢 Venue & Equipment Rental</h5>
-                    <p class="card-text">Reserve top venues and rent professional-grade lighting, sound systems, and more.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow" style="background-color: #F5EEDC;">
-                <div class="card-body">
-                    <h5 class="card-title" style="color:#27548A;">🎟️ Ticketing & Guest Management</h5>
-                    <p class="card-text">Create digital tickets, track attendance, and handle guest check-ins with ease.</p>
-                </div>
-            </div>
+    </div>
+    <div class="col-md-6">
+        <div class="glass service-card">
+            <h5 class="card-title">Ticketing & Guest Management</h5>
+            <p class="card-text">Digital tickets, attendance tracking, and smooth check-ins.</p>
         </div>
     </div>
 </div>
-
-@section Styles {
-    <style>
-        h2.display-5 {
-            font-weight: 700;
-        }
-
-        .card-title {
-            font-weight: 600;
-        }
-
-        .card-text {
-            color: #183B4E;
-        }
-    </style>
-}

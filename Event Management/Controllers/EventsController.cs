@@ -1,39 +1,30 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Event_Management.Attributes;
 using Event_Management.Data;
 using Event_Management.Models;
 
 namespace Event_Management.Controllers
 {
+    [AuthorizeAdmin]
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-
 
         public EventsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Events
         public async Task<IActionResult> Index()
         {
-            if (HttpContext.Session.GetString("UserType") != "Admin")
-            {
-                return RedirectToAction("AccessDenied", "Account");
-            }
             var events = _context.Events
                 .Include(e => e.Location)
                 .Include(e => e.Organizer);
             return View(await events.ToListAsync());
         }
 
-        // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -50,35 +41,31 @@ namespace Event_Management.Controllers
             return View(eventModel);
         }
 
-        // GET: Events/Create
+        [HttpGet]
         public IActionResult Create()
         {
-            // لو المستخدم مش مسجل دخول
-            var userType = HttpContext.Session.GetString("UserType");
-
-            if (userType != "Manager" && userType != "Admin") // يعني يا Manager يا Admin
-            {
-                return RedirectToAction("AccessDenied", "Account");
-            }
-
-            ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationName");
-            ViewData["OrganizerId"] = new SelectList(_context.Users, "UserId", "FullName");
-
+            PopulateCreateDropdowns();
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Create(Event @event, IFormFile Image)
+        public async Task<IActionResult> Create(
+            [Bind("EventName,EventDate,LocationId,OrganizerId")] Event @event,
+            IFormFile? Image)
         {
+            await ValidateForeignKeysAsync(@event);
+
             if (ModelState.IsValid)
             {
                 if (Image != null && Image.Length > 0)
                 {
                     var fileName = Path.GetFileName(Image.FileName);
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                    var imagesDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                    Directory.CreateDirectory(imagesDir);
+                    var filePath = Path.Combine(imagesDir, fileName);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    await using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await Image.CopyToAsync(stream);
                     }
@@ -88,18 +75,31 @@ namespace Event_Management.Controllers
 
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
-                TempData["Success"] = "🎉 Event created successfully!";
+                TempData["Success"] = "Event created successfully!";
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Confirmation), new { id = @event.EventId });
             }
 
-            ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationName", @event.LocationId);
-            ViewData["OrganizerId"] = new SelectList(_context.Users, "UserId", "FullName", @event.OrganizerId);
-            return View("Confirmation", @event);
+            PopulateCreateDropdowns(@event.LocationId, @event.OrganizerId);
+            return View(@event);
         }
 
+        public async Task<IActionResult> Confirmation(int? id)
+        {
+            if (id == null)
+                return RedirectToAction(nameof(Index));
 
-        // GET: Events/Edit/5
+            var eventModel = await _context.Events
+                .Include(e => e.Location)
+                .Include(e => e.Organizer)
+                .FirstOrDefaultAsync(e => e.EventId == id);
+
+            if (eventModel == null)
+                return NotFound();
+
+            return View(eventModel);
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,18 +109,20 @@ namespace Event_Management.Controllers
             if (eventModel == null)
                 return NotFound();
 
-            ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationName", eventModel.LocationId);
-            ViewData["OrganizerId"] = new SelectList(_context.Users, "UserId", "FullName", eventModel.OrganizerId);
+            PopulateCreateDropdowns(eventModel.LocationId, eventModel.OrganizerId);
             return View(eventModel);
         }
 
-        // POST: Events/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate,ImagePath,LocationId,OrganizerId")] Event eventModel)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("EventId,EventName,EventDate,ImagePath,LocationId,OrganizerId")] Event eventModel)
         {
             if (id != eventModel.EventId)
                 return NotFound();
+
+            await ValidateForeignKeysAsync(eventModel);
 
             if (ModelState.IsValid)
             {
@@ -133,18 +135,15 @@ namespace Event_Management.Controllers
                 {
                     if (!EventExists(eventModel.EventId))
                         return NotFound();
-                    else
-                        throw;
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationName", eventModel.LocationId);
-            ViewData["OrganizerId"] = new SelectList(_context.Users, "UserId", "FullName", eventModel.OrganizerId);
+            PopulateCreateDropdowns(eventModel.LocationId, eventModel.OrganizerId);
             return View(eventModel);
         }
 
-        // GET: Events/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -161,7 +160,6 @@ namespace Event_Management.Controllers
             return View(eventModel);
         }
 
-        // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -172,6 +170,43 @@ namespace Event_Management.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private void PopulateCreateDropdowns(int? selectedLocationId = null, int? selectedOrganizerId = null)
+        {
+            if (!_context.Locations.Any())
+            {
+                ViewBag.LocationWarning = "No locations exist yet. Add locations before creating events.";
+            }
+
+            ViewData["LocationId"] = new SelectList(
+                _context.Locations.OrderBy(l => l.LocationName),
+                "LocationId",
+                "LocationName",
+                selectedLocationId);
+
+            ViewData["OrganizerId"] = new SelectList(
+                _context.Users.OrderBy(u => u.FullName),
+                "UserId",
+                "FullName",
+                selectedOrganizerId);
+        }
+
+        private async Task ValidateForeignKeysAsync(Event @event)
+        {
+            if (!await _context.Locations.AnyAsync(l => l.LocationId == @event.LocationId))
+            {
+                ModelState.AddModelError(
+                    nameof(Event.LocationId),
+                    "The selected location is invalid. Please choose a location from the list.");
+            }
+
+            if (!await _context.Users.AnyAsync(u => u.UserId == @event.OrganizerId))
+            {
+                ModelState.AddModelError(
+                    nameof(Event.OrganizerId),
+                    "The selected organizer is invalid. Please choose an organizer from the list.");
+            }
         }
 
         private bool EventExists(int id)

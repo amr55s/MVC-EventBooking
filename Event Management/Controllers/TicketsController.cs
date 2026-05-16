@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Event_Management.Attributes;
 using Event_Management.Data;
 using Event_Management.Models;
 
@@ -14,34 +15,26 @@ namespace Event_Management.Controllers
         {
             _context = context;
         }
+
+        [AuthorizeUser]
         public IActionResult MyTickets()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-            var userType = HttpContext.Session.GetString("UserType");
-
-            if (userType != "User")
-            {
-                return RedirectToAction("AccessDenied", "Account");
-            }
 
             var myTickets = _context.Tickets
-                            .Include(t => t.Event)
-                            .Where(t => t.UserId == userId)
-                            .ToList();
+                .Include(t => t.Event)
+                .Where(t => t.UserId == userId)
+                .ToList();
 
             return View(myTickets);
         }
 
-
+        [AuthorizeUser]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-            var userType = HttpContext.Session.GetString("UserType");
-
-            if (userType != "User")
-            {
-                return RedirectToAction("AccessDenied", "Account");
-            }
 
             var ticket = _context.Tickets.FirstOrDefault(t => t.TicketId == id && t.UserId == userId);
 
@@ -52,51 +45,35 @@ namespace Event_Management.Controllers
                 TempData["SuccessMessage"] = "Ticket deleted successfully!";
             }
 
-            return RedirectToAction("MyTickets");
+            return RedirectToAction(nameof(MyTickets));
         }
 
-
-        // GET: Tickets/Create
-
+        [AuthorizeUser]
+        [HttpGet]
         public IActionResult Create()
         {
-            var userType = HttpContext.Session.GetString("UserType");
-
-            if (userType != "User")
-            {
-                return RedirectToAction("AccessDenied", "Account");
-            }
-
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventName");
-
             return View();
         }
 
+        [AuthorizeUser]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Ticket ticket)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-            var userType = HttpContext.Session.GetString("UserType");
-
-            if (userType != "User")
-            {
-                return RedirectToAction("AccessDenied", "Account");
-            }
 
             if (ModelState.IsValid)
             {
-                ticket.UserId = userId ?? 0;
+                ticket.UserId = userId!.Value;
                 _context.Tickets.Add(ticket);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Ticket booked successfully!";
-                return RedirectToAction("Create");
+                return RedirectToAction(nameof(MyTickets));
             }
 
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventName", ticket.EventId);
             return View(ticket);
-
-
         }
     }
 }

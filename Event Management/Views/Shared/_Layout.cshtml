@@ -4,49 +4,50 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Event Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @RenderSection("Styles", required: false)
-
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #27548A;">
+        <nav class="navbar navbar-expand-lg sticky-top site-navbar">
             <div class="container">
-                <a class="navbar-brand fw-bold" style="color:#DDA853;" asp-controller="Home" asp-action="Index">Event Management</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Event Management</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Home" asp-action="Index">🏠 Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @if (Context.Session.GetString("UserType") == "Admin")
                         {
                             <li class="nav-item">
-                                <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Events" asp-action="Index">📅 All Events</a>
+                                <a class="nav-link" asp-controller="Events" asp-action="Index">All Events</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Events" asp-action="Create">➕ Create Event</a>
+                                <a class="nav-link" asp-controller="Events" asp-action="Create">Create Event</a>
                             </li>
                         }
-                            <li class="nav-item">
-                                <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Services" asp-action="Index">🛎️ Services</a>
-                            </li>
-                        
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Services" asp-action="Index">Services</a>
+                        </li>
                         @if (Context.Session.GetString("UserType") == "User")
                         {
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Tickets" asp-action="Create">🎟️ Tickets</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Tickets" asp-action="Create">Tickets</a>
+                            </li>
                         }
                         @if (Context.Session.GetString("UserType") == "Admin")
                         {
                             <li class="nav-item">
-                                <a class="nav-link fw-bold" style="color: #DDA853;" asp-controller="Admin" asp-action="Dashboard">👑 Admin Panel</a>
+                                <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a>
                             </li>
                         }
-
                     </ul>
 
                     <ul class="navbar-nav">
@@ -57,25 +58,24 @@
                             if (userType == "User")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-warning" asp-controller="Tickets" asp-action="MyTickets">🎟️ My Tickets</a>
+                                    <a class="nav-link nav-link--accent" asp-controller="Tickets" asp-action="MyTickets">My Tickets</a>
                                 </li>
                             }
 
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Profile">👤 Profile</a>
+                                <a class="nav-link" asp-controller="Account" asp-action="Profile">Profile</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">🚪 Logout</a>
+                                <a class="nav-link nav-link--danger" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
                         }
-
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link btn-accent ms-lg-2 px-3" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
                     </ul>
@@ -84,18 +84,16 @@
         </nav>
     </header>
 
-    <main role="main" class="container mt-4 pb-5">
+    <main role="main" class="site-main">
         @RenderBody()
-      
     </main>
 
-    <footer class="bg-light text-center py-3 border-top">
-        <span class="text-muted">© 2025 EventMaster. All rights reserved.</span>
+    <footer class="site-footer">
+        <span>&copy; @DateTime.Now.Year EventMaster. All rights reserved.</span>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @RenderSection("Scripts", required: false)
-
 </body>
 </html>
