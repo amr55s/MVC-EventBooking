@@ -16,6 +16,40 @@ namespace Event_Management.Controllers
             _context = context;
         }
 
+        [AuthorizeAdmin]
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var tickets = await _context.Tickets
+                .AsNoTracking()
+                .Include(t => t.Event)
+                .Include(t => t.User)
+                .OrderBy(t => t.Event != null ? t.Event.EventDate : DateTime.MaxValue)
+                .ThenBy(t => t.User != null ? t.User.FullName : string.Empty)
+                .ToListAsync();
+
+            return View(tickets);
+        }
+
+        [AuthorizeAdmin]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAdmin(int id)
+        {
+            var ticket = await _context.Tickets.FindAsync(id);
+            if (ticket == null)
+            {
+                TempData["ErrorMessage"] = "Ticket not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Tickets.Remove(ticket);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Ticket deleted successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+
         [AuthorizeUser]
         public IActionResult MyTickets()
         {

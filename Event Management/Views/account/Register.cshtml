@@ -1,33 +1,192 @@
-﻿@{
-    ViewData["Title"] = "Register";
+@model Event_Management.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Create Account";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="glass-card">
-            <h3 class="page-title text-center mb-4" style="font-size: 1.35rem;">Register</h3>
-            <form asp-controller="Account" asp-action="Register" method="post">
-                <div class="mb-3">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" name="FullName" class="form-control" required />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="Email" class="form-control" required />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="Password" class="form-control" required />
-                </div>
-                <div class="mb-4">
-                    <label class="form-label">User Type</label>
-                    <select name="UserType" class="form-select" required>
-                        <option value="User">User</option>
-                        <option value="Admin">Admin</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-accent w-100">Create account</button>
-            </form>
-        </div>
+<div class="register-page">
+    <div class="register-panel">
+        <p class="register-kicker">Event Management</p>
+        <h1>Create your account</h1>
+        <p class="register-intro">Enter your details to start booking events.</p>
+
+        <form asp-controller="Account" asp-action="Register" method="post" class="register-form" novalidate>
+            <div asp-validation-summary="ModelOnly" class="register-validation-summary"></div>
+
+            <div class="register-field">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" autocomplete="name" autofocus />
+                <span asp-validation-for="FullName"></span>
+            </div>
+
+            <div class="register-field">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" autocomplete="email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+
+            <div class="register-field">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" autocomplete="new-password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+
+            <button type="submit" class="register-submit">Create account</button>
+        </form>
+
+        <p class="register-footer">
+            Already registered?
+            <a asp-controller="Account" asp-action="Login">Sign in</a>
+        </p>
     </div>
 </div>
+
+@section Styles {
+    <style>
+        body {
+            background: #fff;
+            color: #050505;
+            font-family: "Inter", "Cairo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .site-main {
+            max-width: none;
+            padding: 0;
+            background: #fff;
+        }
+
+        .register-page {
+            min-height: calc(100vh - 150px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 1.5rem;
+            background: #fff;
+        }
+
+        .register-panel {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .register-kicker {
+            margin: 0 0 1rem;
+            color: #666;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .register-panel h1 {
+            margin: 0;
+            color: #050505;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1.2;
+        }
+
+        .register-intro {
+            margin: 0.75rem 0 2.5rem;
+            color: #4a4a4a;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .register-form {
+            display: grid;
+            gap: 1.45rem;
+        }
+
+        .register-field {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .register-field label {
+            color: #111;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .register-field input {
+            width: 100%;
+            min-height: 56px;
+            border: 1px solid #d9d9d9;
+            border-radius: 0;
+            background: #fff;
+            color: #050505;
+            font: inherit;
+            font-size: 1rem;
+            padding: 0 1rem;
+            outline: none;
+            transition: border-color 0.18s ease;
+        }
+
+        .register-field input:focus {
+            border-color: #050505;
+        }
+
+        .register-field span,
+        .register-validation-summary {
+            color: #b00020;
+            font-size: 0.87rem;
+            line-height: 1.5;
+        }
+
+        .register-validation-summary ul {
+            margin: 0;
+            padding-left: 1.1rem;
+        }
+
+        .register-submit {
+            min-height: 56px;
+            margin-top: 0.45rem;
+            border: 1px solid #050505;
+            background: #050505;
+            color: #fff;
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.18s ease, color 0.18s ease;
+        }
+
+        .register-submit:hover,
+        .register-submit:focus {
+            background: #fff;
+            color: #050505;
+        }
+
+        .register-footer {
+            margin: 2rem 0 0;
+            color: #4a4a4a;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .register-footer a {
+            color: #050505;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        @@media (max-width: 576px) {
+            .register-page {
+                align-items: flex-start;
+                padding: 3.5rem 1.25rem;
+            }
+
+            .register-panel h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

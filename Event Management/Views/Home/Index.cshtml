@@ -20,7 +20,14 @@
                 we ensure every detail of your event is perfect — from start to finish.
             </p>
             
-            <a class="btn btn-accent" asp-controller="Tickets" asp-action="Create">Book Now</a>
+            @if (Context.Session.GetString("UserType") == "Admin")
+            {
+                <a class="btn btn-accent" asp-controller="Events" asp-action="Create">Create Event</a>
+            }
+            else
+            {
+                <a class="btn btn-accent" asp-controller="Tickets" asp-action="Create">Book Event</a>
+            }
         </div>
     </div>
 </div>

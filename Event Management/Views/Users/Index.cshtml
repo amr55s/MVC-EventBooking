@@ -1,0 +1,70 @@
+@model IEnumerable<Event_Management.Models.User>
+@{
+    ViewData["Title"] = "Users";
+    var currentUserId = Context.Session.GetInt32("UserId");
+}
+
+<div class="page-header">
+    <h1 class="page-title">All Users</h1>
+    <p class="page-subtitle">Review registered users and manage inactive accounts.</p>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-glass text-center mb-4">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-glass text-center mb-4">@TempData["ErrorMessage"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="glass-card empty-state">
+        <p class="mb-0 text-muted">No users have registered yet.</p>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-glass mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>@user.PhoneNumber</td>
+                        <td><span class="badge-role">@user.UserType</span></td>
+                        <td class="text-end">
+                            @if (user.UserId == currentUserId)
+                            {
+                                <span class="text-muted">Current account</span>
+                            }
+                            else
+                            {
+                                <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this user?');">Delete</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="gap-actions mt-4">
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-ghost">Back to Dashboard</a>
+</div>

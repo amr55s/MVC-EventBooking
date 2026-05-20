@@ -4,6 +4,8 @@ using Event_Management.Models;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using Event_Management.Attributes;
+using Event_Management.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -162,24 +164,39 @@ namespace Event_Management.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            return View(new RegisterViewModel());
         }
 
         [HttpPost]
-        public IActionResult Register(User user)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (_context.Users.Any(u => u.Email == user.Email))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("Email", "Email already exists.");
-                return View();
+                return View(model);
             }
 
+            var emailExists = await _context.Users.AnyAsync(u => u.Email == model.Email);
+            if (emailExists)
+            {
+                ModelState.AddModelError(nameof(RegisterViewModel.Email), "An account with this email already exists.");
+                return View(model);
+            }
+
+            var user = new User
+            {
+                FullName = model.FullName,
+                Email = model.Email,
+                Password = model.Password,
+                UserType = "User",
+            };
+
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             HttpContext.Session.SetInt32("UserId", user.UserId);
-            HttpContext.Session.SetString("UserName", user.FullName);
-            HttpContext.Session.SetString("UserType", user.UserType ?? "User");
+            HttpContext.Session.SetString("UserName", user.FullName ?? string.Empty);
+            HttpContext.Session.SetString("UserType", user.UserType);
 
             return RedirectToAction("Index", "Home");
         }
